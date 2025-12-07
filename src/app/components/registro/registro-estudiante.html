@@ -1,12 +1,118 @@
-<div class="contenedor">
-  <div class="tarjeta">
-    <h2>Registro Estudiante</h2>
-    <form (ngSubmit)="registrar()">
-      <label>Nombre:</label><input type="text" [(ngModel)]="nombre" name="nombre" required>
-      <label>Correo:</label><input type="email" [(ngModel)]="correo" name="correo" required>
-      <label>Contraseña:</label><input type="password" [(ngModel)]="contrasena" name="contrasena" required>
-      <button type="submit">Registrarse</button>
+<!-- Skip link para navegación por teclado -->
+<a href="#contenido-principal" class="skip-link" aria-label="Saltar al formulario de registro estudiante">
+  Saltar al formulario de registro
+</a>
+
+<div class="contenedor" role="main" aria-label="Formulario de registro para estudiantes">
+  <div class="tarjeta" id="contenido-principal">
+    
+    <!-- Anuncio para lectores de pantalla -->
+    <div class="sr-only" aria-live="polite" aria-atomic="true">
+      Formulario de registro estudiante. Complete todos los campos obligatorios.
+    </div>
+    
+    <h2 id="titulo-registro">Registro Estudiante</h2>
+    
+    <form (ngSubmit)="registrar()" aria-labelledby="titulo-registro" novalidate>
+      
+      <!-- Nombre -->
+      <label for="nombre-estudiante">
+        Nombre completo
+        <span class="required-indicator" aria-hidden="true">*</span>
+        <span class="sr-only">(campo obligatorio)</span>
+      </label>
+      <input type="text" 
+             id="nombre-estudiante" 
+             [(ngModel)]="nombre" 
+             name="nombre" 
+             required
+             aria-required="true"
+             placeholder="Ingrese su nombre completo"
+             aria-describedby="ayuda-nombre">
+      <span id="ayuda-nombre" class="sr-only">
+        Ingrese su nombre y apellido completos
+      </span>
+      
+      <!-- Correo -->
+      <label for="correo-estudiante">
+        Correo institucional
+        <span class="required-indicator" aria-hidden="true">*</span>
+        <span class="sr-only">(campo obligatorio, debe ser correo institucional .edu)</span>
+      </label>
+      <input type="email" 
+             id="correo-estudiante" 
+             [(ngModel)]="correo" 
+             name="correo" 
+             required
+             aria-required="true"
+             placeholder="ejemplo@ceutec.edu"
+             aria-describedby="ayuda-correo">
+      <span id="ayuda-correo" class="sr-only">
+        Debe ser un correo institucional de CEUTEC que termine en .edu
+      </span>
+      
+      <!-- Contraseña -->
+      <label for="contrasena-estudiante">
+        Contraseña
+        <span class="required-indicator" aria-hidden="true">*</span>
+        <span class="sr-only">(campo obligatorio, mínimo 8 caracteres)</span>
+      </label>
+      <input type="password" 
+             id="contrasena-estudiante" 
+             [(ngModel)]="contrasena" 
+             name="contrasena" 
+             required
+             aria-required="true"
+             placeholder="Mínimo 8 caracteres"
+             minlength="8"
+             aria-describedby="ayuda-contrasena">
+      <span id="ayuda-contrasena" class="sr-only">
+        La contraseña debe tener al menos 8 caracteres
+      </span>
+      
+      <!-- Mensaje de error de validación -->
+      <div *ngIf="mostrarErrorValidacion" 
+           class="mensaje-error" 
+           role="alert" 
+           aria-live="assertive"
+           [attr.aria-labelledby]="'error-titulo'">
+        <span id="error-titulo" class="sr-only">Error en el formulario:</span>
+        Complete todos los campos correctamente.
+      </div>
+      
+      <!-- Botón de registro -->
+      <button type="submit" 
+              [disabled]="registrando"
+              [attr.aria-busy]="registrando"
+              aria-label="Registrarse como estudiante">
+        <span *ngIf="!registrando; else cargando">
+          <i class="fas fa-user-plus" aria-hidden="true"></i>
+          <span class="btn-text">Registrarse</span>
+        </span>
+        <ng-template #cargando>
+          <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+          <span class="btn-text">Registrando...</span>
+        </ng-template>
+      </button>
     </form>
-    <p class="mensaje">{{ mensaje }}</p>
+    
+    <!-- Mensaje de estado -->
+    <div class="mensaje" 
+         [class.mensaje-exito]="mensaje.includes('✅')"
+         [class.mensaje-error]="mensaje.includes('❌')"
+         role="status" 
+         aria-live="polite"
+         [attr.aria-atomic]="true">
+      {{ mensaje }}
+    </div>
+    
+    <!-- Enlace para volver -->
+    <div class="enlace-inicio">
+      <a href="/#/login-estudiante" 
+         aria-label="Volver a la página de inicio de sesión para estudiantes">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        Volver a inicio de sesión
+      </a>
+    </div>
   </div>
 </div>

@@ -1,136 +1,167 @@
-<div class="contenedor-qrreserva">
+<!-- Skip link para navegación por teclado -->
+<a href="#contenido-principal" class="skip-link" aria-label="Saltar al contenido principal de verificación de reservación">
+  Saltar al contenido principal
+</a>
+
+<div class="contenedor-qrreserva" role="main" aria-label="Página de verificación de código QR de reservación">
+  
   <!-- Header con Logo -->
   <div class="header">
     <div class="logo">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/CEUTEC_logo.svg/1200px-CEUTEC_logo.svg.png" 
-           alt="Logo CEUTEC" 
+           alt="Logo CEUTEC - Centro Universitario Tecnológico" 
            class="logo-imagen"
-           (error)="onImageError($event)">
+           (error)="onImageError($event)"
+           width="150" height="auto">
     </div>
-    <h1>CEUTEC</h1>
+    <h1 id="titulo-principal">CEUTEC</h1>
     <p class="subtitulo">Centro Universitario Tecnológico</p>
   </div>
 
-  <!-- Estado de carga -->
-  <div *ngIf="cargando" class="estado-carga">
-    <div class="spinner"></div>
-    <p>Verificando reservación...</p>
+  <!-- Anuncio de estado para lectores de pantalla -->
+  <div class="sr-only" aria-live="polite" aria-atomic="true">
+    {{ cargando ? 'Verificando reservación, por favor espere...' : 
+       reservacionValida ? 'Reservación verificada correctamente' : 
+       error ? 'Error al verificar la reservación' : 
+       'Reservación no encontrada' }}
   </div>
 
-  <!-- Reservación válida -->
-  <div *ngIf="!cargando && reservacionValida && reservacion" class="contenido-reserva">
+  <!-- Contenido principal -->
+  <div id="contenido-principal">
     
-    <!-- Información de emisión -->
-    <div class="informacion-emision">
-      <div class="campo-emision">
-        <label>Fecha de Emisión:</label>
-        <span>{{ fechaEmision }}</span>
+    <!-- Estado de carga -->
+    <div *ngIf="cargando" class="estado-carga" role="status" aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Verificando reservación...</p>
+      <span class="sr-only">Cargando, por favor espere</span>
+    </div>
+
+    <!-- Reservación válida -->
+    <div *ngIf="!cargando && reservacionValida && reservacion" class="contenido-reserva">
+      
+      <!-- Información de emisión -->
+      <section class="informacion-emision" aria-label="Información de emisión del comprobante">
+        <div class="campo-emision">
+          <label id="fecha-emision-label">Fecha de Emisión:</label>
+          <span aria-labelledby="fecha-emision-label">{{ fechaEmision }}</span>
+        </div>
+        <div class="campo-emision">
+          <label id="hora-emision-label">Hora de Emisión:</label>
+          <span aria-labelledby="hora-emision-label">{{ horaEmision }}</span>
+        </div>
+      </section>
+
+      <!-- Estado verificado -->
+      <div class="estado-verificado" role="status" aria-live="polite">
+        <i class="fas fa-check-circle" aria-hidden="true"></i>
+        <h2>RESERVACIÓN COMPLETADA</h2>
+        <span class="sr-only">Estado: Reservación completada y verificada</span>
       </div>
-      <div class="campo-emision">
-        <label>Hora de Emisión:</label>
-        <span>{{ horaEmision }}</span>
+
+      <!-- Información de la reservación -->
+      <section class="informacion-reserva" aria-label="Detalles completos de la reservación">
+        <h3 id="titulo-informacion">INFORMACIÓN DE LA RESERVACIÓN</h3>
+        
+        <div class="campo">
+          <label for="nombre-reserva"><i class="fas fa-user" aria-hidden="true"></i> Nombre Completo:</label>
+          <span id="nombre-reserva">{{ reservacion.nombre }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="cuenta-reserva"><i class="fas fa-id-card" aria-hidden="true"></i> Número de Cuenta:</label>
+          <span id="cuenta-reserva">{{ reservacion.numeroCuenta }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="correo-reserva"><i class="fas fa-envelope" aria-hidden="true"></i> Correo Institucional:</label>
+          <span id="correo-reserva">{{ reservacion.correo }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="campus-reserva"><i class="fas fa-university" aria-hidden="true"></i> Campus:</label>
+          <span id="campus-reserva">{{ reservacion.campus }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="sede-reserva"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Sede:</label>
+          <span id="sede-reserva">{{ reservacion.sede || 'No especificada' }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="tipo-aula-reserva"><i class="fas fa-chalkboard" aria-hidden="true"></i> Tipo de Aula:</label>
+          <span id="tipo-aula-reserva">{{ reservacion.tipoAula }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="numero-aula-reserva"><i class="fas fa-door-open" aria-hidden="true"></i> Número de Aula:</label>
+          <span id="numero-aula-reserva">{{ reservacion.numeroaula }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="fecha-reserva"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Fecha de Reservación:</label>
+          <span id="fecha-reserva">{{ reservacion.fecha }}</span>
+        </div>
+        
+        <div class="campo">
+          <label for="hora-reserva"><i class="fas fa-clock" aria-hidden="true"></i> Hora de Reservación:</label>
+          <span id="hora-reserva">{{ reservacion.hora }} (Duración: 1.5 horas)</span>
+        </div>
+        
+        <div class="campo full-width" *ngIf="reservacion.otrosEstudiantes && reservacion.otrosEstudiantes.length > 0">
+          <label for="estudiantes-reserva"><i class="fas fa-users" aria-hidden="true"></i> Otros Estudiantes:</label>
+          <span id="estudiantes-reserva" class="lista-estudiantes">{{ reservacion.otrosEstudiantes.join(', ') }}</span>
+        </div>
+      </section>
+
+      <!-- Mensaje de presentación -->
+      <div class="mensaje-presentacion" role="note" aria-label="Nota importante para presentación">
+        <i class="fas fa-id-card" aria-hidden="true"></i>
+        <div class="texto-mensaje">
+          <h4>PRESENTAR EN CASO DE SER REQUERIDO POR LAS AUTORIDADES UNIVERSITARIAS</h4>
+          <span class="sr-only">Nota: Este comprobante debe ser presentado si las autoridades universitarias lo solicitan</span>
+        </div>
+      </div>
+
+      <!-- Botón para volver -->
+      <div class="botones-reserva">
+        <button class="btn-volver" 
+                (click)="volverInicio()"
+                aria-label="Volver al formulario de reservación">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> 
+          <span class="btn-text">Volver al Formulario</span>
+        </button>
       </div>
     </div>
 
-    <!-- Estado verificado -->
-    <div class="estado-verificado">
-      <i class="fas fa-check-circle"></i>
-      <h2>RESERVACIÓN COMPLETADA</h2>
-    </div>
-
-    <!-- Información de la reservación -->
-    <div class="informacion-reserva">
-      <h3>INFORMACIÓN DE LA RESERVACIÓN</h3>
-      
-      <div class="campo">
-        <label><i class="fas fa-user"></i> Nombre Completo:</label>
-        <span>{{ reservacion.nombre }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-id-card"></i> Número de Cuenta:</label>
-        <span>{{ reservacion.numeroCuenta }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-envelope"></i> Correo Institucional:</label>
-        <span>{{ reservacion.correo }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-university"></i> Campus:</label>
-        <span>{{ reservacion.campus }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-map-marker-alt"></i> Sede:</label>
-        <span>{{ reservacion.sede || 'No especificada' }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-chalkboard"></i> Tipo de Aula:</label>
-        <span>{{ reservacion.tipoAula }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-door-open"></i> Número de Aula:</label>
-        <span>{{ reservacion.numeroaula }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-calendar-alt"></i> Fecha de Reservación:</label>
-        <span>{{ reservacion.fecha }}</span>
-      </div>
-      
-      <div class="campo">
-        <label><i class="fas fa-clock"></i> Hora de Reservación:</label>
-        <span>{{ reservacion.hora }} (Duración: 1.5 horas)</span>
-      </div>
-      
-      <div class="campo full-width" *ngIf="reservacion.otrosEstudiantes && reservacion.otrosEstudiantes.length > 0">
-        <label><i class="fas fa-users"></i> Otros Estudiantes:</label>
-        <span class="lista-estudiantes">{{ reservacion.otrosEstudiantes.join(', ') }}</span>
+    <!-- Reservación no encontrada -->
+    <div *ngIf="!cargando && !reservacionValida && !error" class="estado-error" role="alert">
+      <div class="tarjeta-error">
+        <i class="fas fa-times-circle" aria-hidden="true"></i>
+        <h2>RESERVACIÓN NO ENCONTRADA</h2>
+        <p>La reservación no existe en nuestro sistema.</p>
+        <p>Verifique el código QR escaneado.</p>
+        <button class="btn-volver" 
+                (click)="volverInicio()"
+                aria-label="Volver al formulario principal">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> 
+          <span class="btn-text">Volver al Formulario</span>
+        </button>
       </div>
     </div>
 
-    <!-- Mensaje de presentación -->
-    <div class="mensaje-presentacion">
-      <i class="fas fa-id-card"></i>
-      <div class="texto-mensaje">
-        <h4>PRESENTAR EN CASO DE SER REQUERIDO POR LAS AUTORIDADES UNIVERSITARIAS</h4>
+    <!-- Error de verificación -->
+    <div *ngIf="!cargando && error" class="estado-error" role="alert">
+      <div class="tarjeta-error">
+        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+        <h2>ERROR DE VERIFICACIÓN</h2>
+        <p>No se pudo verificar la reservación en este momento.</p>
+        <button class="btn-volver" 
+                (click)="volverInicio()"
+                aria-label="Volver al formulario principal">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> 
+          <span class="btn-text">Volver al Formulario</span>
+        </button>
       </div>
-    </div>
-
-    <!-- Botón para volver -->
-    <div class="botones-reserva">
-      <button class="btn-volver" (click)="volverInicio()">
-        <i class="fas fa-arrow-left"></i> Volver al Formulario
-      </button>
-    </div>
-  </div>
-
-  <!-- Reservación no encontrada -->
-  <div *ngIf="!cargando && !reservacionValida && !error" class="estado-error">
-    <div class="tarjeta-error">
-      <i class="fas fa-times-circle"></i>
-      <h2>RESERVACIÓN NO ENCONTRADA</h2>
-      <p>La reservación no existe en nuestro sistema.</p>
-      <p>Verifique el código QR escaneado.</p>
-      <button class="btn-volver" (click)="volverInicio()">
-        <i class="fas fa-arrow-left"></i> Volver al Formulario
-      </button>
-    </div>
-  </div>
-
-  <!-- Error de verificación -->
-  <div *ngIf="!cargando && error" class="estado-error">
-    <div class="tarjeta-error">
-      <i class="fas fa-exclamation-triangle"></i>
-      <h2>ERROR DE VERIFICACIÓN</h2>
-      <p>No se pudo verificar la reservación en este momento.</p>
-      <button class="btn-volver" (click)="volverInicio()">
-        <i class="fas fa-arrow-left"></i> Volver al Formulario
-      </button>
     </div>
   </div>
 </div>

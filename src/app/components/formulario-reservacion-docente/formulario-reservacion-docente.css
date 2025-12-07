@@ -6,6 +6,8 @@ body {
   background-color: #e1f0ff;
   margin: 0;
   padding: 0;
+  line-height: 1.6;
+  color: #333;
 }
 
 .contenedor-formulario {
@@ -23,6 +25,7 @@ body {
   margin-bottom: 30px;
   font-size: 32px;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .form-grid {
@@ -48,28 +51,30 @@ body {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #333;
+  color: #222;
 }
 
 .icono.azul { color: #004aad; }
 .icono.rojo { color: #e53935; }
-.icono.beige { color: #f5c97b; }
+.icono.beige { color: #8B5A2B; }
 
 /* CAMPOS MÁS COMPACTOS */
 input, select {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 8px;
   font-size: 14px;
   transition: 0.3s;
   background: white;
   height: 42px;
+  color: #222;
 }
 
 input:focus, select:focus {
   border-color: #004aad;
-  outline: none;
+  outline: 3px solid #004aad;
+  outline-offset: 2px;
   box-shadow: 0 0 6px rgba(0, 74, 173, 0.25);
 }
 
@@ -93,10 +98,16 @@ input:focus, select:focus {
   cursor: pointer;
   transition: 0.3s;
   font-weight: 600;
-  min-width: 40px;
+  min-width: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.btn-agregar:focus {
+  outline: 3px solid #004aad;
+  outline-offset: 2px;
 }
 
 .btn-agregar:hover {
@@ -114,7 +125,7 @@ input:focus, select:focus {
   padding: 0;
   background: white;
   border-radius: 6px;
-  border: 1px solid #ddd;
+  border: 1px solid #555;
   max-height: 100px;
   overflow-y: auto;
   font-size: 13px;
@@ -123,11 +134,39 @@ input:focus, select:focus {
 .lista-clases li {
   padding: 6px 10px;
   border-bottom: 1px solid #eee;
-  color: #555;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lista-clases li:focus-within {
+  background-color: #e3f2fd;
+  outline: 2px solid #004aad;
 }
 
 .lista-clases li:last-child {
   border-bottom: none;
+}
+
+.btn-eliminar-clase {
+  background: none;
+  border: none;
+  color: #e53935;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-left: 10px;
+  font-size: 12px;
+  min-width: 24px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-eliminar-clase:focus {
+  outline: 2px solid #e53935;
+  border-radius: 4px;
 }
 
 /* Botones principales */
@@ -139,7 +178,7 @@ input:focus, select:focus {
   margin-top: 15px;
 }
 
-button:not(.btn-agregar) {
+button:not(.btn-agregar, .btn-eliminar-clase) {
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -150,16 +189,24 @@ button:not(.btn-agregar) {
   align-items: center;
   gap: 6px;
   font-weight: 600;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .btn-aceptar { background: #004aad; color: white; }
-.btn-confirmar { background: #009688; color: white; }
-.btn-actualizar { background: #ffc107; color: #333; }
-.btn-cancelar { background: #e53935; color: white; }
+.btn-confirmar { background: #00695c; color: white; }
+.btn-actualizar { background: #ff8f00; color: #222; }
+.btn-cancelar { background: #c62828; color: white; }
 
-button:not(.btn-agregar):hover {
-  transform: scale(1.05);
+button:not(.btn-agregar, .btn-eliminar-clase):hover,
+button:not(.btn-agregar, .btn-eliminar-clase):focus {
   opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+button:not(.btn-agregar, .btn-eliminar-clase):focus {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
 }
 
 /* ESTILOS MEJORADOS DEL RESUMEN */
@@ -169,7 +216,7 @@ button:not(.btn-agregar):hover {
   border-radius: 12px;
   margin-top: 25px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e0e0e0;
+  border: 1px solid #555;
 }
 
 .titulo-resumen {
@@ -185,7 +232,7 @@ button:not(.btn-agregar):hover {
   width: 45px; 
 }
 
-.titulo-resumen h3 {
+.titulo-resumen h2 {
   color: #004aad;
   font-size: 24px;
   margin: 0;
@@ -208,13 +255,13 @@ button:not(.btn-agregar):hover {
 
 .resumen-label {
   font-weight: 600;
-  color: #333;
+  color: #222;
   min-width: 140px;
   font-size: 14px;
 }
 
 .resumen-value {
-  color: #555;
+  color: #333;
   flex: 1;
   font-size: 14px;
   word-break: break-word;
@@ -242,10 +289,10 @@ button:not(.btn-agregar):hover {
   text-align: center; 
   margin-top: 20px; 
   padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #555;
 }
 
-.qr-container h4 {
+.qr-container h3 {
   color: #004aad;
   margin-bottom: 15px;
   font-size: 16px;
@@ -259,10 +306,118 @@ button:not(.btn-agregar):hover {
 
 /* Tachado de horas ocupadas */
 select option:disabled {
-  color: #e53935;
+  color: #999;
+  background-color: #f5f5f5;
   text-decoration: line-through;
 }
 
+/* ESTILOS DE ACCESIBILIDAD */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.required-field {
+  color: #e53935;
+  font-weight: bold;
+}
+
+/* Mensajes de error */
+.mensaje-error {
+  background-color: #ffebee;
+  border: 2px solid #e53935;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: 600;
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mensaje-error i {
+  font-size: 18px;
+}
+
+/* Mejora para campos deshabilitados */
+input:disabled, select:disabled, button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mejora contraste para hover */
+button:not(.btn-agregar):hover,
+button:not(.btn-agregar):focus {
+  opacity: 0.9;
+}
+
+/* Alto contraste mode support */
+@media (prefers-contrast: high) {
+  body {
+    background-color: #ffffff;
+  }
+  
+  .contenedor-formulario {
+    background: #ffffff;
+    border: 2px solid #000000;
+  }
+  
+  input, select {
+    border: 2px solid #000000;
+  }
+  
+  .icono.azul { color: #0000FF; }
+  .icono.rojo { color: #FF0000; }
+  .icono.beige { color: #8B4513; }
+  
+  .btn-aceptar, .btn-confirmar, .btn-actualizar, .btn-cancelar {
+    border: 2px solid #000000;
+  }
+}
+
+/* Mejora para reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  button:not(.btn-agregar):hover,
+  button:not(.btn-agregar):focus {
+    transform: none;
+  }
+  
+  .btn-agregar:hover {
+    transform: none;
+  }
+}
+
+/* Mejora para texto grande */
+@media (min-width: 768px) {
+  .form-group label,
+  .resumen-label,
+  .resumen-value,
+  input,
+  select,
+  button {
+    font-size: clamp(14px, 1.1vw, 16px);
+  }
+}
+
+/* Ajustes específicos para mobile con accesibilidad */
 @media (max-width: 768px) {
   .form-grid { 
     grid-template-columns: 1fr; 
@@ -284,6 +439,7 @@ select option:disabled {
   .botones-formulario,
   .botones-resumen { 
     flex-direction: column; 
+    gap: 10px;
   }
   
   .contenedor-formulario {
@@ -299,4 +455,73 @@ select option:disabled {
   .resumen-label {
     min-width: auto;
   }
+  
+  /* Mejoras de accesibilidad para móviles */
+  input,
+  select,
+  button:not(.btn-agregar) {
+    min-height: 48px;
+    font-size: 16px;
+  }
+  
+  .btn-text {
+    font-size: 16px;
+  }
+  
+  .titulo-form {
+    font-size: 26px;
+  }
+  
+  .titulo-resumen h2 {
+    font-size: 20px;
+  }
+}
+
+/* Mejora para navegación por teclado */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 10px;
+  background: #004aad;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 10px;
+}
+
+/* Estilos para estado de foco en todos los elementos interactivos */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #004aad;
+  outline-offset: 2px;
+}
+
+/* Contraste mínimo para textos */
+@media (max-width: 768px) {
+  .contenedor-formulario {
+    background: #ffffff;
+  }
+  
+  .resumen-reservacion {
+    background: #ffffff;
+  }
+}
+
+/* Asegurar contraste suficiente para textos sobre fondos */
+.btn-aceptar,
+.btn-confirmar,
+.btn-cancelar {
+  color: #ffffff !important;
+}
+
+.btn-actualizar {
+  color: #222222 !important;
 }

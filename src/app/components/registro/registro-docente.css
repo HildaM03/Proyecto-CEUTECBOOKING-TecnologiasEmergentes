@@ -1,8 +1,261 @@
-.contenedor{display:flex;justify-content:center;align-items:center;height:100vh;background:#f5f5f5;}
-.tarjeta{background:#fff;padding:30px 40px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);width:350px;text-align:center;}
-h2{color:#28a745;margin-bottom:20px;}
-label{display:block;text-align:left;margin:10px 0 5px;font-weight:bold;}
-input{width:100%;padding:8px 12px;margin-bottom:15px;border-radius:5px;border:1px solid #ccc;}
-button{width:100%;padding:10px;background:#28a745;color:#fff;border:none;border-radius:5px;font-weight:bold;cursor:pointer;transition:.3s;}
-button:hover{background:#218838;}
-.mensaje{margin-top:15px;font-weight:bold;}
+/* Skip link para navegación por teclado */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 10px;
+  background: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 1000;
+  border: 2px solid transparent;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 10px;
+  outline: 3px solid #ff9800;
+  outline-offset: 2px;
+}
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f5f5f5;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.tarjeta {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  width: 350px;
+  max-width: 90%;
+  text-align: center;
+  border: 2px solid transparent;
+}
+
+/* Mejoras de focus para la tarjeta */
+.tarjeta:focus-within {
+  border-color: #28a745;
+  outline: 3px solid #ff9800;
+  outline-offset: 5px;
+}
+
+h2 {
+  color: #28a745;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  line-height: 1.2;
+}
+
+/* Mejoras para labels */
+label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #333; /* Mejor contraste */
+  font-size: 14px;
+}
+
+/* Indicador de campo obligatorio */
+.required-indicator {
+  color: #dc3545;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  color: #333;
+}
+
+/* Mejoras de focus para inputs */
+input:focus {
+  border-color: #28a745;
+  outline: 3px solid #28a745;
+  outline-offset: 2px;
+}
+
+input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+/* Placeholders con mejor contraste */
+::placeholder {
+  color: #666;
+  opacity: 0.8;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .3s;
+  font-size: 16px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Mejoras de focus para botón */
+button:focus {
+  outline: 3px solid #ff9800;
+  outline-offset: 3px;
+}
+
+button:hover {
+  background: #218838;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.mensaje {
+  margin-top: 15px;
+  font-weight: bold;
+  min-height: 24px;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Mensaje de éxito */
+.mensaje-exito {
+  color: #28a745;
+  background-color: #f0fff4;
+  border: 1px solid #28a745;
+}
+
+/* Mensaje de error */
+.mensaje-error {
+  color: #dc3545;
+  background-color: #fff5f5;
+  border: 1px solid #dc3545;
+}
+
+/* Soporte para alto contraste */
+@media (prefers-contrast: high) {
+  .tarjeta {
+    border: 3px solid #000;
+    background: white;
+  }
+  
+  button {
+    border: 2px solid #000;
+  }
+  
+  input {
+    border: 2px solid #000;
+  }
+}
+
+/* Reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  button, input {
+    transition: none;
+  }
+  
+  button:hover {
+    transform: none;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .contenedor {
+    padding: 10px;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .tarjeta {
+    padding: 25px;
+    width: 100%;
+  }
+  
+  h2 {
+    font-size: 1.5em;
+  }
+  
+  button {
+    min-height: 44px;
+  }
+}
+
+/* Mejoras para navegación por teclado */
+.keyboard-navigation *:focus {
+  outline: 3px solid #ff9800 !important;
+  outline-offset: 2px !important;
+}
+
+/* Enlace para volver a inicio */
+.enlace-inicio {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.enlace-inicio a {
+  color: #28a745;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.enlace-inicio a:focus {
+  outline: 2px solid #28a745;
+  outline-offset: 2px;
+  background-color: #f0fff4;
+}
+
+.enlace-inicio a:hover {
+  text-decoration: underline;
+  background-color: #f0fff4;
+}

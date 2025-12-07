@@ -1,58 +1,115 @@
-<div class="contenedor-formulario">
-  <h2 class="titulo-form">Reserva Tu Aula</h2>
+<div class="contenedor-formulario" role="main" aria-label="Formulario de reserva de aula">
+  <h1 class="titulo-form">Reserva Tu Aula</h1>
 
-  <form *ngIf="!resumen" class="form-grid">
+  <form *ngIf="!resumen" class="form-grid" aria-labelledby="form-title" novalidate>
+    <h2 id="form-title" class="sr-only">Formulario de reserva de aula</h2>
 
-    <!-- Fila 1: Nombre completo y Número de cuenta -->
+    <!-- Fila 1: Nombre completo y Nombre de la carrera -->
     <div class="form-group">
-      <label><i class="fas fa-user icono azul"></i> Nombre completo</label>
-      <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ingrese su nombre completo" required>
+      <label for="nombre-completo">
+        <i class="fas fa-user icono azul" aria-hidden="true"></i> 
+        <span class="label-text">Nombre completo</span>
+        <span class="required-field" aria-hidden="true"> *</span>
+        <span class="sr-only">(campo obligatorio)</span>
+      </label>
+      <input type="text" id="nombre-completo" [(ngModel)]="nombre" name="nombre" 
+             placeholder="Ingrese su nombre completo" required
+             aria-required="true" aria-invalid="false">
     </div>
 
     <div class="form-group">
-      <label><i class="fas fa-briefcase icono rojo"></i> Nombre de la carrera</label>
-      <input type="text" [(ngModel)]="nombredelacarrera" name="nombredelacarrera" placeholder="Nombre de la Carrera" required>
+      <label for="nombre-carrera">
+        <i class="fas fa-briefcase icono rojo" aria-hidden="true"></i> 
+        <span class="label-text">Nombre de la carrera</span>
+        <span class="required-field" aria-hidden="true"> *</span>
+        <span class="sr-only">(campo obligatorio)</span>
+      </label>
+      <input type="text" id="nombre-carrera" [(ngModel)]="nombredelacarrera" 
+             name="nombredelacarrera" placeholder="Nombre de la Carrera" required
+             aria-required="true" aria-invalid="false">
     </div>
 
-    <!-- Fila 2: Correo educativo y añadir clase y seccion -->
+    <!-- Fila 2: Correo educativo y añadir clase y sección -->
     <div class="form-group">
-      <label><i class="fas fa-envelope icono azul"></i> Correo educativo</label>
-      <input type="email" [(ngModel)]="correo" name="correo" placeholder="ejemplo@dominio.edu" required>
+      <label for="correo-educativo">
+        <i class="fas fa-envelope icono azul" aria-hidden="true"></i> 
+        <span class="label-text">Correo educativo</span>
+        <span class="required-field" aria-hidden="true"> *</span>
+        <span class="sr-only">(campo obligatorio, formato .edu)</span>
+      </label>
+      <input type="email" id="correo-educativo" [(ngModel)]="correo" name="correo" 
+             placeholder="ejemplo@dominio.edu" required
+             aria-required="true" aria-invalid="false"
+             aria-describedby="correo-help">
+      <small id="correo-help" class="sr-only">Debe ser un correo educativo terminado en .edu</small>
     </div>
 
-  <div class="form-group">
-      <label><i class="fas fa-users icono beige"></i> Añadir Clase y Seccion</label>
+    <div class="form-group">
+      <label for="nueva-clase">
+        <i class="fas fa-users icono beige" aria-hidden="true"></i> 
+        <span class="label-text">Añadir Clase y Sección</span>
+      </label>
       <div class="agregar-container">
-        <input #NuevaClase type="text" placeholder="Ingrese su clase y seccion" class="input-clase">
-        <button type="button" class="btn-agregar" (click)="agregarClaseyseccion(NuevaClase.value); NuevaClase.value=''">
-          <i class="fas fa-plus"></i> 
+        <input type="text" id="nueva-clase" #NuevaClase 
+               placeholder="Ingrese su clase y sección" class="input-clase"
+               aria-label="Campo para añadir clase y sección">
+        <button type="button" class="btn-agregar" 
+                (click)="agregarClaseyseccion(NuevaClase.value); NuevaClase.value=''"
+                aria-label="Añadir clase y sección a la lista">
+          <i class="fas fa-plus" aria-hidden="true"></i> 
+          <span class="sr-only">Añadir</span>
         </button>
       </div>
-      <div class="lista-clases-container">
-        <ul class="lista-clases">
-          <li *ngFor="let clase of nuevaClase">{{ clase }}</li>
+      <div class="lista-clases-container" *ngIf="nuevaClase.length > 0">
+        <h3 class="sr-only">Clases y secciones agregadas</h3>
+        <ul class="lista-clases" aria-label="Lista de clases y secciones agregadas">
+          <li *ngFor="let clase of nuevaClase; let i = index" id="clase-{{i}}">
+            <span>{{ clase }}</span>
+            <button type="button" class="btn-eliminar-clase" 
+                    (click)="eliminarClase(i)"
+                    aria-label="Eliminar clase {{ clase }}">
+              <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+          </li>
         </ul>
+      </div>
+      <div *ngIf="nuevaClase.length === 0" class="sr-only" aria-live="polite">
+        No hay clases agregadas
       </div>
     </div>
 
     <!-- Fila 3: Campus y Sede -->
     <div class="form-group">
-      <label><i class="fas fa-university icono azul"></i> Campus</label>
-      <select [(ngModel)]="campus" name="campus" (change)="cargarHorasOcupadas()">
+      <label for="campus">
+        <i class="fas fa-university icono azul" aria-hidden="true"></i> 
+        <span class="label-text">Campus</span>
+      </label>
+      <select id="campus" [(ngModel)]="campus" name="campus" 
+              (change)="cargarHorasOcupadas()"
+              aria-label="Seleccione un campus">
         <option value="">Seleccione un campus</option>
         <option *ngFor="let c of campusOpciones" [value]="c">{{ c }}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label><i class="fas fa-map-marker-alt icono rojo"></i> Sede</label>
-      <input type="text" [(ngModel)]="sede" name="sede" placeholder="Sede de la reservación">
+      <label for="sede">
+        <i class="fas fa-map-marker-alt icono rojo" aria-hidden="true"></i> 
+        <span class="label-text">Sede</span>
+      </label>
+      <input type="text" id="sede" [(ngModel)]="sede" name="sede" 
+             placeholder="Sede de la reservación">
     </div>
 
-    <!-- Fila 4: Tipo de aula y Fecha -->
+    <!-- Fila 4: Tipo de aula y Número de Aula -->
     <div class="form-group">
-      <label><i class="fas fa-chalkboard icono beige"></i> Tipo de aula</label>
-      <select [(ngModel)]="tipoAula" name="tipoAula" (change)="cargarHorasOcupadas()">
+      <label for="tipo-aula">
+        <i class="fas fa-chalkboard icono beige" aria-hidden="true"></i> 
+        <span class="label-text">Tipo de aula</span>
+      </label>
+      <select id="tipo-aula" [(ngModel)]="tipoAula" name="tipoAula" 
+              (change)="cargarHorasOcupadas()"
+              aria-label="Seleccione tipo de aula">
         <option value="">Seleccione tipo de aula</option>
         <option value="Salón de estudio">Salón de estudio</option>
         <option value="Laboratorio">Laboratorio</option>
@@ -60,43 +117,75 @@
         <option value="Aula normal">Aula normal</option>
       </select>
     </div>
-  <div class="form-group">
-    <label><i class="fas fa-door-open icono beige"></i> Número de Aula</label>
-    <input type="text" [(ngModel)]="numeroaula" name="numeroaula" placeholder="Número de Aula" required>
-  </div>
 
     <div class="form-group">
-      <label><i class="fas fa-calendar-alt icono azul"></i> Fecha</label>
-      <input type="date" [(ngModel)]="fecha" name="fecha" required (change)="cargarHorasOcupadas()">
+      <label for="numero-aula">
+        <i class="fas fa-door-open icono beige" aria-hidden="true"></i> 
+        <span class="label-text">Número de Aula</span>
+        <span class="required-field" aria-hidden="true"> *</span>
+        <span class="sr-only">(campo obligatorio)</span>
+      </label>
+      <input type="text" id="numero-aula" [(ngModel)]="numeroaula" 
+             name="numeroaula" placeholder="Número de Aula" required
+             aria-required="true" aria-invalid="false">
     </div>
 
-    <!-- Fila 5: Hora (ocupa todo el ancho) -->
+    <!-- Fila 5: Fecha -->
+    <div class="form-group">
+      <label for="fecha">
+        <i class="fas fa-calendar-alt icono azul" aria-hidden="true"></i> 
+        <span class="label-text">Fecha</span>
+        <span class="required-field" aria-hidden="true"> *</span>
+        <span class="sr-only">(campo obligatorio)</span>
+      </label>
+      <input type="date" id="fecha" [(ngModel)]="fecha" name="fecha" required 
+             (change)="cargarHorasOcupadas()"
+             aria-required="true" aria-invalid="false">
+    </div>
+
+    <!-- Fila 6: Hora (ocupa todo el ancho) -->
     <div class="form-group full-width">
-      <label><i class="fas fa-clock icono rojo"></i> Hora (1.5 h)</label>
-      <select [(ngModel)]="hora" name="hora">
+      <label for="hora">
+        <i class="fas fa-clock icono rojo" aria-hidden="true"></i> 
+        <span class="label-text">Hora (1.5 h)</span>
+      </label>
+      <select id="hora" [(ngModel)]="hora" name="hora"
+              aria-label="Seleccione una hora, las horas tachadas no están disponibles"
+              aria-describedby="hora-help">
         <option value="">Seleccione una hora</option>
         <option *ngFor="let h of horasDisponibles" [value]="h" [disabled]="horasOcupadas.includes(h)">
           {{ h }}
         </option>
       </select>
+      <small id="hora-help" class="sr-only" aria-live="polite">
+        Las horas tachadas no están disponibles
+      </small>
+    </div>
+
+    <!-- Mensajes de validación -->
+    <div class="mensaje-error" role="alert" aria-live="assertive" *ngIf="mostrarError">
+      <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+      {{ mensajeError }}
     </div>
 
     <!-- Botones -->
     <div class="botones-formulario">
-      <button type="button" class="btn-aceptar" (click)="aceptarReservacion()">
-        <i class="fas fa-check-circle"></i> Aceptar
+      <button type="button" class="btn-aceptar" (click)="aceptarReservacion()"
+              aria-label="Aceptar reservación y mostrar resumen">
+        <i class="fas fa-check-circle" aria-hidden="true"></i> 
+        <span class="btn-text">Aceptar</span>
       </button>
     </div>
   </form>
 
   <!-- RESUMEN MEJORADO -->
-  <div *ngIf="resumen" class="resumen-reservacion">
+  <div *ngIf="resumen" class="resumen-reservacion" role="region" aria-labelledby="resumen-title">
     <div class="titulo-resumen">
-      <img src="https://img.icons8.com/emoji/48/000000/robot-emoji.png" alt="Logo Bot">
-      <h3>Tu Reservación</h3>
+      <img src="https://img.icons8.com/emoji/48/000000/robot-emoji.png" alt="" aria-hidden="true">
+      <h2 id="resumen-title">Resumen de tu Reservación</h2>
     </div>
 
-    <div class="info-resumen">
+    <div class="info-resumen" aria-label="Detalles de la reservación">
       <div class="resumen-item">
         <span class="resumen-label">Nombre:</span>
         <span class="resumen-value">{{ resumen.nombre }}</span>
@@ -110,7 +199,7 @@
         <span class="resumen-value">{{ resumen.correo }}</span>
       </div>
       <div class="resumen-item">
-        <span class="resumen-label">Añadir Clase y Seccion:</span>
+        <span class="resumen-label">Añadir Clase y Sección:</span>
         <span class="resumen-value">{{ resumen.nuevaClase.join(', ') || 'Ninguno' }}</span>
       </div>
       <div class="resumen-item">
@@ -139,23 +228,36 @@
       </div>
     </div>
 
-    <div class="separador"></div>
+    <div class="separador" aria-hidden="true"></div>
 
     <div class="botones-resumen">
-      <button class="btn-confirmar" (click)="confirmarReservacion()">
-        <i class="fas fa-check"></i> Confirmar
+      <button class="btn-confirmar" (click)="confirmarReservacion()"
+              aria-label="Confirmar reservación y generar código QR">
+        <i class="fas fa-check" aria-hidden="true"></i> 
+        <span class="btn-text">Confirmar</span>
       </button>
-      <button class="btn-actualizar" (click)="actualizarReservacion()">
-        <i class="fas fa-sync-alt"></i> Actualizar
+      <button class="btn-actualizar" (click)="actualizarReservacion()"
+              aria-label="Actualizar información de la reservación">
+        <i class="fas fa-sync-alt" aria-hidden="true"></i> 
+        <span class="btn-text">Actualizar</span>
       </button>
-      <button class="btn-cancelar" (click)="cancelarReservacion()">
-        <i class="fas fa-times"></i> Cancelar
+      <button class="btn-cancelar" (click)="cancelarReservacion()"
+              aria-label="Cancelar reservación">
+        <i class="fas fa-times" aria-hidden="true"></i> 
+        <span class="btn-text">Cancelar</span>
       </button>
     </div>
 
-    <div *ngIf="qrDataUrl" class="qr-container">
-      <h4>QR de tu reservación:</h4>
-      <img [src]="qrDataUrl" alt="QR">
+    <div *ngIf="qrDataUrl" class="qr-container" role="region" aria-labelledby="qr-title">
+      <h3 id="qr-title">QR de tu reservación:</h3>
+      <img [src]="qrDataUrl" alt="Código QR con los detalles de la reservación">
+      <p class="sr-only">Código QR con los detalles de la reservación. 
+        Incluye: Nombre: {{ resumen.nombre }}, 
+        Carrera: {{ resumen.nombredelacarrera }}, 
+        Campus: {{ resumen.campus }}, 
+        Fecha: {{ resumen.fecha }}, 
+        Hora: {{ resumen.hora }}
+      </p>
     </div>
   </div>
 </div>

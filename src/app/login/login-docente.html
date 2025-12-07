@@ -1,52 +1,161 @@
 <div class="fondo">
-  <div class="overlay"></div>
-  <div class="tarjeta">
+  <!-- Enlace para saltar navegación (accesibilidad) -->
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+  
+  <div class="tarjeta" role="main" id="main-content">
+    <div role="alert" aria-live="polite" class="sr-only" id="live-region">
+      <!-- Región viva para anuncios de lectores de pantalla -->
+    </div>
 
     <!-- LOGIN -->
-    <form *ngIf="!mostrarRegistro" (ngSubmit)="login()" class="fade">
-      <img src="https://ceutec.hn/wp-content/uploads/2025/01/logo-ceutec-web.png" alt="Logo CEUTEC" class="logo">
-      <h2>Login Docente</h2>
+    <form *ngIf="!mostrarRegistro" (ngSubmit)="login()" class="fade" aria-labelledby="login-title">
+      <img src="https://ceutec.hn/wp-content/uploads/2025/01/logo-ceutec-web.png" 
+           alt="Logo CEUTEC" 
+           class="logo"
+           aria-hidden="true">
+      
+      <h2 id="login-title">Login Docente</h2>
 
-      <label><i class="fas fa-envelope"></i> Correo:</label>
-      <input type="email" [(ngModel)]="correo" name="correo" required placeholder="ejemplo@correo.edu">
+      <div class="form-group">
+        <label for="correo-login">
+          <i class="fas fa-envelope" aria-hidden="true"></i> 
+          <span>Correo:</span>
+        </label>
+        <input type="email" 
+               id="correo-login" 
+               [(ngModel)]="correo" 
+               name="correo" 
+               required 
+               placeholder="ejemplo@correo.edu"
+               aria-required="true"
+               autocomplete="email"
+               aria-describedby="correo-login-help">
+        <span id="correo-login-help" class="sr-only">Debe ser un correo educativo que termine en .edu</span>
+      </div>
 
-      <label><i class="fas fa-lock"></i> Contraseña:</label>
-      <input type="password" [(ngModel)]="contrasena" name="contrasena" required placeholder="********">
+      <div class="form-group">
+        <label for="contrasena-login">
+          <i class="fas fa-lock" aria-hidden="true"></i> 
+          <span>Contraseña:</span>
+        </label>
+        <input type="password" 
+               id="contrasena-login" 
+               [(ngModel)]="contrasena" 
+               name="contrasena" 
+               required 
+               placeholder="********"
+               aria-required="true"
+               autocomplete="current-password"
+               minlength="6">
+      </div>
 
-      <button type="submit" class="btn-login">
-        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+      <button type="submit" class="btn-login" aria-label="Iniciar sesión como docente">
+        <i class="fas fa-sign-in-alt" aria-hidden="true"></i> 
+        <span>Iniciar Sesión</span>
+        <span *ngIf="cargando" class="spinner" aria-hidden="true"></span>
       </button>
 
       <p>
         ¿No tienes cuenta?
-        <a href="#" (click)="mostrarFormularioRegistro($event)">Registrarse aquí</a>
+        <a href="#" 
+           (click)="mostrarFormularioRegistro($event)" 
+           aria-label="Registrarse como docente nuevo"
+           aria-controls="registro-form">
+          Registrarse aquí
+        </a>
       </p>
     </form>
 
     <!-- REGISTRO -->
-    <form *ngIf="mostrarRegistro" (ngSubmit)="registrar()" class="fade">
-      <img src="https://ceutec.hn/wp-content/uploads/2025/01/logo-ceutec-web.png" alt="Logo CEUTEC" class="logo">
-      <h2>Registro Docente</h2>
+    <form *ngIf="mostrarRegistro" 
+          (ngSubmit)="registrar()" 
+          class="fade" 
+          id="registro-form"
+          aria-labelledby="registro-title">
+      <img src="https://ceutec.hn/wp-content/uploads/2025/01/logo-ceutec-web.png" 
+           alt="Logo CEUTEC" 
+           class="logo"
+           aria-hidden="true">
+      
+      <h2 id="registro-title">Registro Docente</h2>
 
-      <label><i class="fas fa-user"></i> Nombre:</label>
-      <input type="text" [(ngModel)]="nombre" name="nombre" required placeholder="Tu nombre completo">
+      <div class="form-group">
+        <label for="nombre-registro">
+          <i class="fas fa-user" aria-hidden="true"></i> 
+          <span>Nombre:</span>
+        </label>
+        <input type="text" 
+               id="nombre-registro" 
+               [(ngModel)]="nombre" 
+               name="nombre" 
+               required 
+               placeholder="Tu nombre completo"
+               aria-required="true"
+               autocomplete="name">
+      </div>
 
-      <label><i class="fas fa-envelope"></i> Correo:</label>
-      <input type="email" [(ngModel)]="correo" name="correoRegistro" required placeholder="ejemplo@correo.edu">
+      <div class="form-group">
+        <label for="correo-registro">
+          <i class="fas fa-envelope" aria-hidden="true"></i> 
+          <span>Correo:</span>
+        </label>
+        <input type="email" 
+               id="correo-registro" 
+               [(ngModel)]="correo" 
+               name="correoRegistro" 
+               required 
+               placeholder="ejemplo@correo.edu"
+               aria-required="true"
+               autocomplete="email"
+               aria-describedby="correo-registro-help">
+        <span id="correo-registro-help" class="sr-only">Debe ser un correo educativo que termine en .edu</span>
+      </div>
 
-      <label><i class="fas fa-lock"></i> Contraseña:</label>
-      <input type="password" [(ngModel)]="contrasena" name="contrasenaRegistro" required placeholder="********">
+      <div class="form-group">
+        <label for="contrasena-registro">
+          <i class="fas fa-lock" aria-hidden="true"></i> 
+          <span>Contraseña:</span>
+        </label>
+        <input type="password" 
+               id="contrasena-registro" 
+               [(ngModel)]="contrasena" 
+               name="contrasenaRegistro" 
+               required 
+               placeholder="********"
+               aria-required="true"
+               autocomplete="new-password"
+               minlength="6"
+               aria-describedby="password-requirements">
+        <span id="password-requirements" class="sr-only">La contraseña debe tener al menos 6 caracteres</span>
+      </div>
 
-      <button type="submit" class="btn-registro">
-        <i class="fas fa-user-plus"></i> Registrarse
+      <button type="submit" class="btn-registro" aria-label="Registrarse como docente">
+        <i class="fas fa-user-plus" aria-hidden="true"></i> 
+        <span>Registrarse</span>
+        <span *ngIf="cargando" class="spinner" aria-hidden="true"></span>
       </button>
 
       <p>
         ¿Ya tienes cuenta?
-        <a href="#" (click)="mostrarRegistro = false">Volver al login</a>
+        <a href="#" 
+           (click)="mostrarRegistro = false" 
+           aria-label="Volver al formulario de inicio de sesión"
+           aria-controls="login-form">
+          Volver al login
+        </a>
       </p>
     </form>
 
-    <p class="mensaje" [class.visible]="mensaje">{{ mensaje }}</p>
+    <!-- Mensajes para todos los usuarios -->
+    <div class="mensaje" 
+         [class.visible]="mensaje" 
+         [class.success]="tipoMensaje === 'success'"
+         [class.error]="tipoMensaje === 'error'"
+         [class.info]="tipoMensaje === 'info'"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+      {{ mensaje }}
+    </div>
   </div>
 </div>

@@ -9,7 +9,7 @@ import { LoginDocenteComponent } from './login/login-docente';
 import { QrreservaComponent } from './components/qrreserva/qrreserva';
 
 export const routes: Routes = [
-  { path: '', component: PaginaBienvenidaComponent },
+  { path: '', component: PaginaBienvenidaComponent },  // AHORA ES LA PÁGINA PRINCIPAL
   { path: 'login-estudiante', component: LoginEstudianteComponent },
   { path: 'login-docente', component: LoginDocenteComponent },
   { path: 'registro-estudiante', component: RegistroEstudianteComponent },

@@ -1,151 +1,375 @@
-<div class="contenedor-formulario">
+<!-- Skip link para navegación por teclado -->
+<a href="#contenido-principal" class="skip-link" aria-label="Saltar al contenido principal">
+  Saltar al contenido principal
+</a>
+
+<div class="contenedor-formulario" id="contenido-principal" role="main" aria-label="Formulario de reservación estudiantil">
   <!-- PANTALLA DE CONFIRMACIÓN EXITOSA -->
-  <div *ngIf="reservacionConfirmada" class="confirmacion-exitosa">
-    <div class="icono-exito">
+  <div *ngIf="reservacionConfirmada" class="confirmacion-exitosa" role="alert" aria-live="polite">
+    <div class="icono-exito" aria-hidden="true">
       <i class="fas fa-check-circle"></i>
     </div>
-    <h2 class="titulo-confirmacion">¡Reservación Confirmada!</h2>
+    <h1 class="titulo-confirmacion">¡Reservación Confirmada!</h1>
     <p class="mensaje-confirmacion">Tu reserva se ha completado satisfactoriamente</p>
     
-    <div class="imagen-check">
+    <div class="imagen-check" aria-hidden="true">
       <i class="fas fa-check-double"></i>
     </div>
     
     <!-- CONTENEDOR DEL QR SIMPLIFICADO -->
-    <div class="qr-container-simple" *ngIf="qrGenerado">
+    <div class="qr-container-simple" *ngIf="qrGenerado" role="region" aria-labelledby="qr-title">
+      <h2 id="qr-title" class="sr-only">Código QR de la reservación</h2>
+      
       <!-- Estado de carga -->
       <div *ngIf="generandoQR && !qrCargado" class="qr-cargando">
-        <div class="spinner"></div>
+        <div class="spinner" aria-hidden="true"></div>
         <p>Generando código QR...</p>
       </div>
 
       <!-- QR Generado Simple -->
       <div *ngIf="!generandoQR && qrDataUrl" class="qr-simple">
         <img [src]="qrDataUrl" 
-             alt="Código QR de reservación" 
+             alt="Código QR de reservación. Escanee este código para ver los detalles de su reserva."
              class="qr-image-simple"
              (load)="onQRLoaded()"
-             (error)="onQRError()">
+             (error)="onQRError()"
+             tabindex="0">
+        <p class="sr-only">
+          Código QR contiene: Reservación de {{resumen?.nombre}}, 
+          Cuenta: {{resumen?.numeroCuenta}}, 
+          Aula: {{resumen?.numeroaula}}, 
+          Fecha: {{resumen?.fecha}}, 
+          Hora: {{resumen?.hora}}
+        </p>
       </div>
 
       <!-- Botón para regenerar -->
-      <button class="btn-regenerar-qr" (click)="regenerarQR()" *ngIf="errorQR || !qrCargado">
-        <i class="fas fa-sync-alt"></i> Reintentar QR
+      <button class="btn-regenerar-qr" 
+              (click)="regenerarQR()" 
+              *ngIf="errorQR || !qrCargado"
+              aria-label="Reintentar generar código QR">
+        <i class="fas fa-sync-alt" aria-hidden="true"></i> 
+        <span class="btn-text">Reintentar QR</span>
       </button>
     </div>
   </div>
 
   <!-- FORMULARIO PRINCIPAL -->
   <div *ngIf="!resumen && !reservacionConfirmada">
-    <h2 class="titulo-form">
-      <i class="fas fa-calendar-check"></i>
-      Formulario de Reservación
-    </h2>
+    <h1 class="titulo-form" id="titulo-formulario">
+      <i class="fas fa-calendar-check" aria-hidden="true"></i>
+      Formulario de Reservación Estudiantil
+    </h1>
+    
+    <p class="sr-only">
+      Complete todos los campos obligatorios marcados con asterisco (*) para realizar una reservación de aula.
+      Presione Tab para navegar entre los campos y Enter para activar botones.
+    </p>
 
-    <form class="form-grid">
+    <form class="form-grid" aria-labelledby="titulo-formulario" novalidate>
+      <!-- Nombre completo -->
       <div class="form-group">
-        <label><i class="fas fa-user icono azul"></i> Nombre completo</label>
-        <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ingrese su nombre completo" required>
+        <label for="nombre-completo">
+          <i class="fas fa-user icono azul" aria-hidden="true"></i> 
+          <span class="label-text">Nombre completo</span>
+          <span class="required-indicator" aria-hidden="true">*</span>
+          <span class="sr-only">(campo obligatorio)</span>
+        </label>
+        <input type="text" 
+               id="nombre-completo" 
+               [(ngModel)]="nombre" 
+               name="nombre" 
+               placeholder="Ingrese su nombre completo" 
+               required
+               aria-required="true"
+               aria-invalid="false"
+               aria-describedby="nombre-error">
+        <span id="nombre-error" class="error-message sr-only" aria-live="polite"></span>
       </div>
 
+      <!-- Número de cuenta -->
       <div class="form-group">
-        <label><i class="fas fa-id-card icono rojo"></i> Número de cuenta</label>
-        <input type="text" [(ngModel)]="numeroCuenta" name="numeroCuenta" placeholder="Número de cuenta" required>
+        <label for="numero-cuenta">
+          <i class="fas fa-id-card icono rojo" aria-hidden="true"></i> 
+          <span class="label-text">Número de cuenta</span>
+          <span class="required-indicator" aria-hidden="true">*</span>
+          <span class="sr-only">(campo obligatorio)</span>
+        </label>
+        <input type="text" 
+               id="numero-cuenta" 
+               [(ngModel)]="numeroCuenta" 
+               name="numeroCuenta" 
+               placeholder="Número de cuenta" 
+               required
+               aria-required="true"
+               aria-invalid="false"
+               aria-describedby="cuenta-error">
+        <span id="cuenta-error" class="error-message sr-only" aria-live="polite"></span>
       </div>
 
+      <!-- Correo educativo -->
       <div class="form-group">
-        <label><i class="fas fa-envelope icono azul"></i> Correo educativo</label>
-        <input type="email" [(ngModel)]="correo" name="correo" placeholder="ejemplo@dominio.edu" required>
+        <label for="correo-educativo">
+          <i class="fas fa-envelope icono azul" aria-hidden="true"></i> 
+          <span class="label-text">Correo educativo</span>
+          <span class="required-indicator" aria-hidden="true">*</span>
+          <span class="sr-only">(campo obligatorio, debe terminar en .edu)</span>
+        </label>
+        <input type="email" 
+               id="correo-educativo" 
+               [(ngModel)]="correo" 
+               name="correo" 
+               placeholder="ejemplo@dominio.edu" 
+               required
+               aria-required="true"
+               aria-invalid="false"
+               aria-describedby="correo-help correo-error">
+        <small id="correo-help" class="sr-only">
+          Debe ser un correo educativo que termine en .edu
+        </small>
+        <span id="correo-error" class="error-message sr-only" aria-live="polite"></span>
       </div>
 
-      <div class="form-group">
-        <label><i class="fas fa-users icono beige"></i> Otros estudiantes</label>
-        <div class="agregar-container">
-          <input #nuevoEst type="text" placeholder="Nombre del estudiante" class="input-estudiante">
-          <button type="button" class="btn-agregar" (click)="agregarEstudiante(nuevoEst.value); nuevoEst.value=''">
-            <i class="fas fa-plus"></i>
+      <!-- Otros estudiantes -->
+      <div class="form-group agregar-container">
+        <label for="agregar-estudiante">
+          <i class="fas fa-users icono beige" aria-hidden="true"></i> 
+          <span class="label-text">Otros estudiantes</span>
+        </label>
+        <div class="agregar-container" aria-describedby="lista-estudiantes-desc">
+          <input type="text" 
+                 id="agregar-estudiante" 
+                 #nuevoEst 
+                 placeholder="Nombre del estudiante" 
+                 class="input-estudiante"
+                 aria-label="Nombre del estudiante a agregar">
+          <button type="button" 
+                  class="btn-agregar" 
+                  (click)="agregarEstudiante(nuevoEst.value); nuevoEst.value=''"
+                  aria-label="Agregar estudiante a la lista">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+            <span class="sr-only">Agregar</span>
           </button>
         </div>
-        <ul class="lista-estudiantes">
-          <li *ngFor="let est of otrosEstudiantes; let i = index" class="estudiante-item">
+        
+        <p id="lista-estudiantes-desc" class="sr-only" aria-live="polite">
+          Lista de estudiantes agregados. Use los botones eliminar para remover estudiantes.
+        </p>
+        
+        <ul class="lista-estudiantes" 
+            *ngIf="otrosEstudiantes.length > 0"
+            aria-label="Lista de estudiantes agregados"
+            role="list">
+          <li *ngFor="let est of otrosEstudiantes; let i = index" 
+              class="estudiante-item"
+              [id]="'estudiante-' + i"
+              role="listitem">
             <span>{{ est }}</span>
-            <button type="button" class="btn-eliminar" (click)="eliminarEstudiante(i)">
-              <i class="fas fa-times"></i>
+            <button type="button" 
+                    class="btn-eliminar" 
+                    (click)="eliminarEstudiante(i)"
+                    [attr.aria-label]="'Eliminar estudiante ' + est"
+                    (keydown)="manejarTecladoEstudiante($event, i)">
+              <i class="fas fa-times" aria-hidden="true"></i>
+              <span class="sr-only">Eliminar</span>
             </button>
           </li>
         </ul>
+        <div *ngIf="otrosEstudiantes.length === 0" class="sr-only" aria-live="polite">
+          No hay estudiantes agregados
+        </div>
       </div>
 
+      <!-- Campus -->
       <div class="form-group">
-        <label><i class="fas fa-university icono azul"></i> Campus</label>
-        <select [(ngModel)]="campus" name="campus" (change)="cargarHorasOcupadas()">
+        <label for="campus">
+          <i class="fas fa-university icono azul" aria-hidden="true"></i> 
+          <span class="label-text">Campus</span>
+        </label>
+        <select id="campus" 
+                [(ngModel)]="campus" 
+                name="campus" 
+                (change)="cargarHorasOcupadas()"
+                aria-label="Seleccione un campus para la reservación"
+                aria-describedby="campus-help">
           <option value="">Seleccione un campus</option>
           <option *ngFor="let c of campusOpciones" [value]="c">{{ c }}</option>
         </select>
+        <small id="campus-help" class="sr-only">
+          Seleccione el campus donde desea realizar la reservación
+        </small>
       </div>
 
+      <!-- Sede -->
       <div class="form-group">
-        <label><i class="fas fa-map-marker-alt icono rojo"></i> Sede</label>
-        <input type="text" [(ngModel)]="sede" name="sede" placeholder="Sede de la reservación">
+        <label for="sede">
+          <i class="fas fa-map-marker-alt icono rojo" aria-hidden="true"></i> 
+          <span class="label-text">Sede</span>
+        </label>
+        <input type="text" 
+               id="sede" 
+               [(ngModel)]="sede" 
+               name="sede" 
+               placeholder="Sede de la reservación"
+               aria-label="Sede específica para la reservación"
+               aria-describedby="sede-help">
+        <small id="sede-help" class="sr-only">
+          Especifique la sede específica dentro del campus (opcional)
+        </small>
       </div>
 
+      <!-- Tipo de aula -->
       <div class="form-group">
-        <label><i class="fas fa-chalkboard icono beige"></i> Tipo de aula</label>
-        <select [(ngModel)]="tipoAula" name="tipoAula" (change)="cargarHorasOcupadas()">
+        <label for="tipo-aula">
+          <i class="fas fa-chalkboard icono beige" aria-hidden="true"></i> 
+          <span class="label-text">Tipo de aula</span>
+        </label>
+        <select id="tipo-aula" 
+                [(ngModel)]="tipoAula" 
+                name="tipoAula" 
+                (change)="cargarHorasOcupadas()"
+                aria-label="Seleccione el tipo de aula"
+                aria-describedby="tipo-aula-help">
           <option value="">Seleccione tipo de aula</option>
           <option value="Salón de estudio">Salón de estudio</option>
           <option value="Laboratorio">Laboratorio</option>
           <option value="Aula para eventos">Aula para eventos</option>
           <option value="Aula normal">Aula normal</option>
         </select>
+        <small id="tipo-aula-help" class="sr-only">
+          Seleccione el tipo de aula que necesita para su reservación
+        </small>
       </div>
 
+      <!-- Número de Aula -->
       <div class="form-group">
-        <label><i class="fas fa-door-open icono beige"></i> Número de Aula</label>
-        <input type="text" [(ngModel)]="numeroaula" name="numeroaula" placeholder="Número de Aula" 
-               (change)="cargarHorasOcupadas()" required>
+        <label for="numero-aula">
+          <i class="fas fa-door-open icono beige" aria-hidden="true"></i> 
+          <span class="label-text">Número de Aula</span>
+          <span class="required-indicator" aria-hidden="true">*</span>
+          <span class="sr-only">(campo obligatorio)</span>
+        </label>
+        <input type="text" 
+               id="numero-aula" 
+               [(ngModel)]="numeroaula" 
+               name="numeroaula" 
+               placeholder="Número de Aula" 
+               (change)="cargarHorasOcupadas()" 
+               required
+               aria-required="true"
+               aria-invalid="false"
+               aria-describedby="aula-error aula-help">
+        <small id="aula-help" class="sr-only">
+          Ingrese el número específico del aula que desea reservar
+        </small>
+        <span id="aula-error" class="error-message sr-only" aria-live="polite"></span>
       </div>
 
+      <!-- Fecha -->
       <div class="form-group">
-        <label><i class="fas fa-calendar-alt icono azul"></i> Fecha</label>
-        <input type="date" [(ngModel)]="fecha" name="fecha" required (change)="cargarHorasOcupadas()">
+        <label for="fecha-reservacion">
+          <i class="fas fa-calendar-alt icono azul" aria-hidden="true"></i> 
+          <span class="label-text">Fecha</span>
+          <span class="required-indicator" aria-hidden="true">*</span>
+          <span class="sr-only">(campo obligatorio)</span>
+        </label>
+        <input type="date" 
+               id="fecha-reservacion" 
+               [(ngModel)]="fecha" 
+               name="fecha" 
+               required 
+               (change)="cargarHorasOcupadas()"
+               aria-required="true"
+               aria-invalid="false"
+               aria-describedby="fecha-error">
+        <span id="fecha-error" class="error-message sr-only" aria-live="polite"></span>
       </div>
 
+      <!-- Hora -->
       <div class="form-group">
-        <label><i class="fas fa-clock icono rojo"></i> Hora (1.5 h)</label>
-        <select [(ngModel)]="hora" name="hora" [disabled]="cargando">
+        <label for="hora-reservacion">
+          <i class="fas fa-clock icono rojo" aria-hidden="true"></i> 
+          <span class="label-text">Hora</span>
+          <span class="required-indicator" aria-hidden="true">*</span>
+          <span class="sr-only">(campo obligatorio)</span>
+        </label>
+        <select id="hora-reservacion" 
+                [(ngModel)]="hora" 
+                name="hora" 
+                [disabled]="cargando"
+                aria-label="Seleccione una hora para la reservación"
+                aria-describedby="hora-help hora-error"
+                [attr.aria-disabled]="cargando">
           <option value="">Seleccione una hora</option>
           <option *ngFor="let h of horasDisponibles" 
                   [value]="h" 
                   [disabled]="esHoraDeshabilitada(h)"
-                  [ngClass]="getClaseHora(h)">
+                  [ngClass]="getClaseHora(h)"
+                  [attr.aria-disabled]="esHoraDeshabilitada(h)"
+                  [attr.aria-describedby]="esHoraDeshabilitada(h) ? 'hora-ocupada-desc' : null">
             {{ h }}
           </option>
         </select>
-        <small *ngIf="cargando" class="cargando-horas">
-          <i class="fas fa-spinner fa-spin"></i> Cargando disponibilidad...
+        <small id="hora-help" class="sr-only" aria-live="polite">
+          Las horas tachadas no están disponibles. Seleccione una hora disponible.
         </small>
+        <small id="hora-ocupada-desc" class="sr-only">
+          Esta hora ya está ocupada y no está disponible
+        </small>
+        <small *ngIf="cargando" class="cargando-horas" aria-live="polite">
+          <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 
+          Cargando disponibilidad...
+        </small>
+        <span id="hora-error" class="error-message sr-only" aria-live="polite"></span>
       </div>
 
+      <!-- Mensaje de error general -->
+      <div *ngIf="mostrarError" 
+           class="error-mensaje" 
+           role="alert" 
+           aria-live="assertive"
+           [attr.aria-labelledby]="'error-titulo'">
+        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+        <span id="error-titulo" class="sr-only">Error en el formulario:</span>
+        <span>{{ mensajeError }}</span>
+      </div>
+
+      <!-- Botón principal -->
       <div class="botones-formulario">
-        <button type="button" class="btn-aceptar" (click)="aceptarReservacion()" [disabled]="cargando">
-          <i class="fas fa-check-circle"></i> 
-          {{ cargando ? 'Cargando...' : 'Aceptar' }}
+        <button type="button" 
+                class="btn-aceptar" 
+                (click)="aceptarReservacion()" 
+                [disabled]="cargando"
+                aria-label="Aceptar y revisar reservación"
+                [attr.aria-describedby]="cargando ? 'cargando-desc' : null">
+          <i class="fas fa-check-circle" aria-hidden="true"></i> 
+          <span class="btn-text">{{ cargando ? 'Cargando...' : 'Aceptar' }}</span>
         </button>
+        <span id="cargando-desc" class="sr-only" *ngIf="cargando">
+          Cargando información de disponibilidad
+        </span>
       </div>
     </form>
   </div>
 
-  <!-- RESUMEN DE RESERVACIÓN - TODOS LOS DATOS EN UN MISMO CONTAINER -->
-  <div *ngIf="resumen && !reservacionConfirmada" class="resumen-reservacion">
+  <!-- RESUMEN DE RESERVACIÓN -->
+  <div *ngIf="resumen && !reservacionConfirmada" 
+       class="resumen-reservacion" 
+       role="region" 
+       aria-labelledby="titulo-resumen">
     <div class="resumen-contenido">
-      <h2 class="titulo-form">
-        <i class="fas fa-file-alt"></i>
-        Datos de Reservación
+      <h2 class="titulo-form" id="titulo-resumen">
+        <i class="fas fa-file-alt" aria-hidden="true"></i>
+        Resumen de la Reservación
       </h2>
       
+      <p class="sr-only">
+        Revise los detalles de su reservación antes de confirmar. Si necesita hacer cambios, use el botón Actualizar.
+        Presione Tab para navegar entre los botones de acción.
+      </p>
+      
       <div class="resumen-header">
-        <div class="logo-placeholder">
+        <div class="logo-placeholder" aria-hidden="true">
           <i class="fas fa-university"></i>
         </div>
         <div class="fecha-hora-emision">
@@ -154,34 +378,56 @@
         </div>
       </div>
 
-      <!-- TODOS LOS DATOS EN UN SOLO CONTAINER -->
-      <div class="datos-container">
-        <div class="resumen-item" *ngFor="let item of resumenItems">
+      <!-- Contenedor de datos -->
+      <div class="datos-container" aria-label="Detalles de la reservación" role="list">
+        <div class="resumen-item" 
+             *ngFor="let item of resumenItems; let i = index"
+             role="listitem">
           <span class="resumen-label">
-            <i [class]="item.icon + ' icono'"></i> {{item.label}}:
+            <i [class]="item.icon + ' icono'" aria-hidden="true"></i> 
+            {{item.label}}:
           </span>
-          <span class="resumen-value">{{item.value}}</span>
+          <span class="resumen-value" [id]="'resumen-valor-' + i">
+            {{item.value}}
+          </span>
         </div>
       </div>
 
-      <div class="separador"></div>
+      <div class="separador" aria-hidden="true"></div>
 
+      <!-- Botones del resumen -->
       <div class="botones-resumen">
-        <button class="btn-confirmar" (click)="confirmarReservacion()" [disabled]="confirmando">
-          <i class="fas fa-check-double"></i> 
-          {{ confirmando ? 'Confirmando...' : 'Confirmar' }}
+        <button class="btn-confirmar" 
+                (click)="confirmarReservacion()" 
+                [disabled]="confirmando"
+                aria-label="Confirmar y guardar la reservación"
+                [attr.aria-describedby]="confirmando ? 'confirmando-desc' : null">
+          <i class="fas fa-check-double" aria-hidden="true"></i> 
+          <span class="btn-text">{{ confirmando ? 'Confirmando...' : 'Confirmar' }}</span>
         </button>
-        <button class="btn-actualizar" (click)="actualizarReservacion()" [disabled]="confirmando">
-          <i class="fas fa-edit"></i> Actualizar
+        <button class="btn-actualizar" 
+                (click)="actualizarReservacion()" 
+                [disabled]="confirmando"
+                aria-label="Actualizar información de la reservación">
+          <i class="fas fa-edit" aria-hidden="true"></i> 
+          <span class="btn-text">Actualizar</span>
         </button>
-        <button class="btn-cancelar" (click)="cancelarReservacion()" [disabled]="confirmando">
-          <i class="fas fa-times"></i> Cancelar
+        <button class="btn-cancelar" 
+                (click)="cancelarReservacion()" 
+                [disabled]="confirmando"
+                aria-label="Cancelar esta reservación">
+          <i class="fas fa-times" aria-hidden="true"></i> 
+          <span class="btn-text">Cancelar</span>
         </button>
       </div>
 
+      <span id="confirmando-desc" class="sr-only" *ngIf="confirmando">
+        Procesando la confirmación de la reservación
+      </span>
+
       <!-- Estado de carga durante confirmación -->
-      <div *ngIf="confirmando" class="estado-carga">
-        <div class="spinner"></div>
+      <div *ngIf="confirmando" class="estado-carga" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
         <p>Procesando tu reservación...</p>
       </div>
     </div>

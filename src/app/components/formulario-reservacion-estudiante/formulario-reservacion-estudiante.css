@@ -27,6 +27,46 @@ body {
   gap: 8px;
 }
 
+/* Skip link para accesibilidad */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 10px;
+  background: #004aad;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 10px;
+  outline: 3px solid #ff9800;
+  outline-offset: 2px;
+}
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Indicadores de campos obligatorios */
+.required-indicator {
+  color: #e53935;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
 /* ===== FORMULARIO - MOBILE FIRST ===== */
 .form-grid {
   display: grid;
@@ -50,7 +90,7 @@ body {
   color: #333;
 }
 
-/* Iconos */
+/* Iconos - TUS COLORES ORIGINALES */
 .icono.azul { color: #004aad; }
 .icono.rojo { color: #e53935; }
 .icono.beige { color: #f5c97b; }
@@ -68,10 +108,23 @@ input, select {
   transition: all 0.2s ease;
 }
 
+/* Mejoras de accesibilidad para focus */
 input:focus, select:focus {
   border-color: #004aad;
-  outline: none;
+  outline: 3px solid #004aad;
+  outline-offset: 2px;
   box-shadow: 0 0 4px rgba(0, 74, 173, 0.2);
+}
+
+/* Estados de validación */
+input:invalid, select:invalid {
+  border-color: #e53935;
+}
+
+input:disabled, select:disabled {
+  background-color: #f5f5f5;
+  color: #666;
+  cursor: not-allowed;
 }
 
 /* Contenedor agregar estudiantes */
@@ -101,6 +154,12 @@ input:focus, select:focus {
   min-width: 44px;
 }
 
+/* Mejora accesibilidad botón agregar */
+.btn-agregar:focus {
+  outline: 3px solid #ff9800;
+  outline-offset: 2px;
+}
+
 .btn-agregar:hover {
   background: #003a8c;
 }
@@ -127,6 +186,12 @@ input:focus, select:focus {
   align-items: center;
 }
 
+/* Mejora para navegación por teclado en lista */
+.estudiante-item:focus-within {
+  background-color: #e3f2fd;
+  outline: 2px solid #004aad;
+}
+
 .btn-eliminar {
   background: none;
   border: none;
@@ -135,6 +200,11 @@ input:focus, select:focus {
   padding: 4px;
   border-radius: 3px;
   transition: background-color 0.2s;
+}
+
+.btn-eliminar:focus {
+  outline: 2px solid #e53935;
+  background-color: #ffebee;
 }
 
 .btn-eliminar:hover {
@@ -196,6 +266,15 @@ select option:disabled {
 .btn-confirmar { background: #4caf50; }
 .btn-actualizar { background: #ff9800; }
 .btn-cancelar { background: #e53935; }
+
+/* Mejoras de accesibilidad para botones */
+.btn-aceptar:focus,
+.btn-confirmar:focus,
+.btn-actualizar:focus,
+.btn-cancelar:focus {
+  outline: 3px solid #ff9800;
+  outline-offset: 2px;
+}
 
 .btn-aceptar:hover, .btn-confirmar:hover, 
 .btn-actualizar:hover, .btn-cancelar:hover {
@@ -391,6 +470,12 @@ select option:disabled {
   padding: 6px;
 }
 
+/* Mejora accesibilidad para imagen QR */
+.qr-image-simple:focus {
+  outline: 3px solid #004aad;
+  outline-offset: 4px;
+}
+
 /* Estado de carga para QR */
 .qr-cargando {
   text-align: center;
@@ -422,8 +507,99 @@ select option:disabled {
   transition: 0.2s;
 }
 
+.btn-regenerar-qr:focus {
+  outline: 3px solid #ff9800;
+  outline-offset: 2px;
+}
+
 .btn-regenerar-qr:hover {
   background: #003a8c;
+}
+
+/* Mensajes de error para accesibilidad */
+.error-mensaje {
+  background-color: #ffebee;
+  border: 2px solid #e53935;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-mensaje i {
+  font-size: 18px;
+}
+
+.error-message {
+  color: #e53935;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ===== SOPORTE PARA ALTO CONTRASTE ===== */
+@media (prefers-contrast: high) {
+  body {
+    background-color: #ffffff;
+  }
+  
+  .contenedor-formulario {
+    background: #ffffff;
+    border: 2px solid #000000;
+  }
+  
+  input, select {
+    border: 2px solid #000000;
+  }
+  
+  .icono.azul { color: #0000FF; }
+  .icono.rojo { color: #FF0000; }
+  .icono.beige { color: #8B4513; }
+}
+
+/* ===== REDUCCIÓN DE MOVIMIENTO ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .btn-aceptar:hover, .btn-confirmar:hover, 
+  .btn-actualizar:hover, .btn-cancelar:hover {
+    transform: none;
+  }
+  
+  .spinner {
+    animation: none;
+  }
+}
+
+/* ===== MEJORAS DE TAMAÑO DE FUENTE ===== */
+@media (max-width: 768px) {
+  .contenedor-formulario {
+    padding: 16px 12px;
+    margin: 10px;
+  }
+  
+  input, select, button, .btn-text {
+    font-size: 16px;
+  }
+  
+  .titulo-form, .titulo-confirmacion {
+    font-size: 22px;
+  }
+  
+  .resumen-label, .resumen-value, .mensaje-confirmacion {
+    font-size: 15px;
+  }
 }
 
 /* ===== BREAKPOINTS OPTIMIZADOS ===== */
@@ -508,4 +684,35 @@ select option:disabled {
   .form-group input[name="numeroaula"] { 
     grid-column: span 1; 
   }
+}
+
+/* ===== MEJORAS PARA LECTORES DE PANTALLA ===== */
+[aria-live="polite"], [aria-live="assertive"] {
+  position: relative;
+}
+
+/* Mejoras de contraste para placeholders */
+::placeholder {
+  color: #666;
+  opacity: 0.8;
+}
+
+:-ms-input-placeholder {
+  color: #666;
+}
+
+::-ms-input-placeholder {
+  color: #666;
+}
+
+/* Mejora para elementos seleccionados */
+::selection {
+  background-color: #004aad;
+  color: white;
+}
+
+/* Visibilidad para navegación por teclado */
+.keyboard-navigation *:focus {
+  outline: 3px solid #ff9800 !important;
+  outline-offset: 2px !important;
 }

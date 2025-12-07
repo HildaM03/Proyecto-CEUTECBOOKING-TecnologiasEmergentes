@@ -1,11 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
+/* Skip link para navegación por teclado */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 10px;
+  background: #004aad;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 1000;
+  border: 2px solid transparent;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 10px;
+  outline: 3px solid #ff9800;
+  outline-offset: 2px;
+}
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
   font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+}
+
+/* Asegurar contraste suficiente para textos */
+body {
+  color: #222; /* Mejor contraste que #333 */
 }
 
 .contenedor {
@@ -15,10 +56,12 @@ body, html {
   align-items: center;
   justify-content: center;
   backdrop-filter: brightness(0.8);
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .tarjeta {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   padding: 40px;
   width: 500px;
@@ -34,12 +77,13 @@ body, html {
   justify-content: center;
   gap: 12px;
   margin-bottom: 20px;
-  flex-wrap: wrap; /* ✅ Para ajustar en pantallas pequeñas */
+  flex-wrap: wrap;
 }
 
 .logo {
   width: 80px;
   height: auto;
+  border-radius: 4px;
 }
 
 .icono-booking {
@@ -52,6 +96,7 @@ body, html {
   font-weight: 700;
   color: #004aad;
   margin: 0;
+  line-height: 1.2;
 }
 
 .titulo h1 span {
@@ -60,7 +105,7 @@ body, html {
 
 .titulo p {
   font-size: 14px;
-  color: #333;
+  color: #222;
   margin-top: 5px;
 }
 
@@ -71,7 +116,7 @@ body, html {
 }
 
 .contenido p {
-  color: #333;
+  color: #222;
   margin-bottom: 25px;
 }
 
@@ -83,7 +128,7 @@ body, html {
 
 .btn {
   border: none;
-  padding: 15px;
+  padding: 16px 20px;
   border-radius: 50px;
   font-size: 16px;
   font-weight: bold;
@@ -95,6 +140,14 @@ body, html {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  min-height: 56px; /* Tamaño mínimo para touch */
+  text-decoration: none;
+}
+
+/* Mejoras de focus para accesibilidad */
+.btn:focus {
+  outline: 3px solid #ff9800;
+  outline-offset: 3px;
 }
 
 .btn.estudiante {
@@ -114,8 +167,39 @@ body, html {
   opacity: 0.9;
 }
 
+.btn:active {
+  transform: scale(1.02);
+}
+
 .btn i {
   font-size: 18px;
+}
+
+/* Soporte para alto contraste */
+@media (prefers-contrast: high) {
+  .tarjeta {
+    background: white;
+    border: 3px solid #000;
+  }
+  
+  .btn.estudiante, .btn.docente {
+    border: 2px solid #000;
+  }
+  
+  .logo, .icono-booking {
+    filter: contrast(1.5);
+  }
+}
+
+/* Reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
 }
 
 /* ✅ Responsive ajustes */
@@ -148,11 +232,41 @@ body, html {
   .btn {
     width: 100%;
     font-size: 15px;
-    padding: 12px;
+    padding: 14px;
+    min-height: 50px;
   }
 
   .contenedor {
     padding: 15px;
     height: auto;
+    min-height: 100vh;
   }
+}
+
+/* Mejoras para navegación por teclado */
+.keyboard-navigation .btn:focus {
+  outline: 3px solid #ff9800 !important;
+  outline-offset: 4px !important;
+}
+
+/* Estados deshabilitados */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  transform: none;
+  opacity: 0.6;
+}
+
+/* Mejoras para textos legibles */
+p, h1, h2 {
+  letter-spacing: 0.01em;
+}
+
+/* Contraste mejorado para enlaces/button focus */
+:focus-visible {
+  outline: 3px solid #004aad;
+  outline-offset: 2px;
 }
